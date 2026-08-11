@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import CollectionCard from "../features/collections/components/CollectionCard";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import {
   getPublishedCollections,
   type Collection,
@@ -11,6 +12,8 @@ type LoadStatus = "loading" | "success" | "error";
 const SKELETON_COUNT = 8;
 
 export default function CollectionsPage() {
+  useDocumentTitle("Collections — RMS Jewelries");
+
   const [collections, setCollections] = useState<Collection[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [retryToken, setRetryToken] = useState(0);

@@ -4,8 +4,11 @@ import FeaturedCollectionsSection from "../components/sections/FeaturedCollectio
 import FeaturedJewelrySection from "../components/sections/FeaturedJewelrySection";
 import ApproachSection from "../components/sections/ApproachSection";
 import FinalCtaSection from "../components/sections/FinalCtaSection";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export default function HomePage() {
+  useDocumentTitle("RMS Jewelries — Custom Jewelry Portfolio");
+
   return (
     <main>
       <HeroSection />

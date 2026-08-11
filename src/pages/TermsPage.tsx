@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import Container from "../components/ui/Container";
 import LegalSection from "../components/ui/LegalSection";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export default function TermsPage() {
+  useDocumentTitle("Terms & Conditions — RMS Jewelries");
+
   return (
     <main>
       <section className="py-20 lg:py-28">

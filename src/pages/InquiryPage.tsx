@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import Container from "../components/ui/Container";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { getPublishedJewelryBySlug } from "../repositories/jewelryRepository";
 import { createInquiry } from "../repositories/inquiryRepository";
 import type { Jewelry } from "../repositories/jewelryRepository";
@@ -8,24 +12,35 @@ import type { Jewelry } from "../repositories/jewelryRepository";
 type JewelryContextStatus = "idle" | "loading" | "resolved" | "unresolved";
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
-interface FormValues {
-  fullName: string;
-  email: string;
-  phone: string;
-  preferredContactMethod: string;
-  message: string;
-}
-
-interface FormErrors {
-  fullName?: string;
-  email?: string;
-  phone?: string;
-  message?: string;
-}
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[0-9+\-()\s]{7,20}$/;
 const MESSAGE_MAX_LENGTH = 2000;
+
+const inquirySchema = z.object({
+  fullName: z.string().trim().min(1, "Please enter your full name."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Please enter your email address.")
+    .email("Please enter a valid email address."),
+  phone: z
+    .string()
+    .trim()
+    .refine((value) => value === "" || PHONE_PATTERN.test(value), {
+      message: "Please enter a valid phone number.",
+    }),
+  preferredContactMethod: z.string(),
+  message: z
+    .string()
+    .trim()
+    .min(1, "Please tell us a little about what you're looking for.")
+    .max(
+      MESSAGE_MAX_LENGTH,
+      `Please keep your message under ${MESSAGE_MAX_LENGTH} characters.`,
+    ),
+  website: z.string(),
+});
+
+type FormValues = z.infer<typeof inquirySchema>;
 
 const INITIAL_VALUES: FormValues = {
   fullName: "",
@@ -33,38 +48,12 @@ const INITIAL_VALUES: FormValues = {
   phone: "",
   preferredContactMethod: "",
   message: "",
+  website: "",
 };
 
-function validate(values: FormValues): FormErrors {
-  const errors: FormErrors = {};
-
-  if (!values.fullName.trim()) {
-    errors.fullName = "Please enter your full name.";
-  }
-
-  const trimmedEmail = values.email.trim();
-  if (!trimmedEmail) {
-    errors.email = "Please enter your email address.";
-  } else if (!EMAIL_PATTERN.test(trimmedEmail)) {
-    errors.email = "Please enter a valid email address.";
-  }
-
-  const trimmedPhone = values.phone.trim();
-  if (trimmedPhone && !PHONE_PATTERN.test(trimmedPhone)) {
-    errors.phone = "Please enter a valid phone number.";
-  }
-
-  const trimmedMessage = values.message.trim();
-  if (!trimmedMessage) {
-    errors.message = "Please tell us a little about what you're looking for.";
-  } else if (trimmedMessage.length > MESSAGE_MAX_LENGTH) {
-    errors.message = `Please keep your message under ${MESSAGE_MAX_LENGTH} characters.`;
-  }
-
-  return errors;
-}
-
 export default function InquiryPage() {
+  useDocumentTitle("Start an Inquiry — RMS Jewelries");
+
   const [searchParams] = useSearchParams();
   const jewelrySlug = searchParams.get("jewelry");
 
@@ -73,11 +62,18 @@ export default function InquiryPage() {
   );
   const [jewelry, setJewelry] = useState<Jewelry | null>(null);
 
-  const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
-  const [errors, setErrors] = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
-  const [honeypot, setHoneypot] = useState("");
   const isSubmittingRef = useRef(false);
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(inquirySchema),
+    defaultValues: INITIAL_VALUES,
+  });
 
   useEffect(() => {
     if (!jewelrySlug) {
@@ -108,27 +104,7 @@ export default function InquiryPage() {
     };
   }, [jewelrySlug]);
 
-  function updateField<K extends keyof FormValues>(field: K, value: string) {
-    setValues((current) => ({ ...current, [field]: value }));
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (isSubmittingRef.current) return;
-
-    if (honeypot.trim() !== "") {
-      setSubmitStatus("success");
-      return;
-    }
-
-    const validationErrors = validate(values);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
+  async function onSubmit(values: FormValues) {
     isSubmittingRef.current = true;
     setSubmitStatus("submitting");
 
@@ -148,6 +124,19 @@ export default function InquiryPage() {
     } finally {
       isSubmittingRef.current = false;
     }
+  }
+
+  function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (isSubmittingRef.current) return;
+
+    if (getValues("website").trim() !== "") {
+      setSubmitStatus("success");
+      return;
+    }
+
+    void handleSubmit(onSubmit)(event);
   }
 
   const fieldClassName =
@@ -259,7 +248,7 @@ export default function InquiryPage() {
 
                 <form
                   noValidate
-                  onSubmit={handleSubmit}
+                  onSubmit={handleFormSubmit}
                   className="mt-10 space-y-7"
                 >
                   <div
@@ -269,12 +258,10 @@ export default function InquiryPage() {
                     <label htmlFor="website">Website</label>
                     <input
                       id="website"
-                      name="website"
                       type="text"
                       tabIndex={-1}
                       autoComplete="off"
-                      value={honeypot}
-                      onChange={(event) => setHoneypot(event.target.value)}
+                      {...register("website")}
                     />
                   </div>
 
@@ -284,19 +271,15 @@ export default function InquiryPage() {
                     </label>
                     <input
                       id="fullName"
-                      name="fullName"
                       type="text"
                       autoComplete="name"
                       required
-                      value={values.fullName}
-                      onChange={(event) =>
-                        updateField("fullName", event.target.value)
-                      }
                       aria-invalid={Boolean(errors.fullName)}
                       aria-describedby={
                         errors.fullName ? "fullName-error" : undefined
                       }
                       className={fieldClassName}
+                      {...register("fullName")}
                     />
                     {errors.fullName && (
                       <p
@@ -304,7 +287,7 @@ export default function InquiryPage() {
                         role="alert"
                         className={errorClassName}
                       >
-                        {errors.fullName}
+                        {errors.fullName.message}
                       </p>
                     )}
                   </div>
@@ -315,23 +298,19 @@ export default function InquiryPage() {
                     </label>
                     <input
                       id="email"
-                      name="email"
                       type="email"
                       autoComplete="email"
                       required
-                      value={values.email}
-                      onChange={(event) =>
-                        updateField("email", event.target.value)
-                      }
                       aria-invalid={Boolean(errors.email)}
                       aria-describedby={
                         errors.email ? "email-error" : undefined
                       }
                       className={fieldClassName}
+                      {...register("email")}
                     />
                     {errors.email && (
                       <p id="email-error" role="alert" className={errorClassName}>
-                        {errors.email}
+                        {errors.email.message}
                       </p>
                     )}
                   </div>
@@ -343,22 +322,18 @@ export default function InquiryPage() {
                     </label>
                     <input
                       id="phone"
-                      name="phone"
                       type="tel"
                       autoComplete="tel"
-                      value={values.phone}
-                      onChange={(event) =>
-                        updateField("phone", event.target.value)
-                      }
                       aria-invalid={Boolean(errors.phone)}
                       aria-describedby={
                         errors.phone ? "phone-error" : undefined
                       }
                       className={fieldClassName}
+                      {...register("phone")}
                     />
                     {errors.phone && (
                       <p id="phone-error" role="alert" className={errorClassName}>
-                        {errors.phone}
+                        {errors.phone.message}
                       </p>
                     )}
                   </div>
@@ -373,15 +348,8 @@ export default function InquiryPage() {
                     </label>
                     <select
                       id="preferredContactMethod"
-                      name="preferredContactMethod"
-                      value={values.preferredContactMethod}
-                      onChange={(event) =>
-                        updateField(
-                          "preferredContactMethod",
-                          event.target.value,
-                        )
-                      }
                       className={fieldClassName}
+                      {...register("preferredContactMethod")}
                     >
                       <option value="">No preference</option>
                       <option value="Email">Email</option>
@@ -396,18 +364,14 @@ export default function InquiryPage() {
                     </label>
                     <textarea
                       id="message"
-                      name="message"
                       rows={6}
                       required
-                      value={values.message}
-                      onChange={(event) =>
-                        updateField("message", event.target.value)
-                      }
                       aria-invalid={Boolean(errors.message)}
                       aria-describedby={
                         errors.message ? "message-error" : undefined
                       }
                       className={fieldClassName}
+                      {...register("message")}
                     />
                     {errors.message && (
                       <p
@@ -415,7 +379,7 @@ export default function InquiryPage() {
                         role="alert"
                         className={errorClassName}
                       >
-                        {errors.message}
+                        {errors.message.message}
                       </p>
                     )}
                   </div>

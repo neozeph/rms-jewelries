@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import Container from "../components/ui/Container";
 import LegalSection from "../components/ui/LegalSection";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export default function PrivacyPage() {
+  useDocumentTitle("Privacy Notice — RMS Jewelries");
+
   return (
     <main>
       <section className="py-20 lg:py-28">
