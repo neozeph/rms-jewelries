@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom";
 import Container from "../ui/Container";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 export default function HeroSection() {
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       aria-labelledby="hero-heading"
       className="relative overflow-hidden"
     >
       <Container>
-        <div className="grid min-h-[75vh] items-center gap-12 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
+        <div
+          ref={ref}
+          className={`reveal grid min-h-[75vh] items-center gap-12 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28 ${isVisible ? "is-visible" : ""}`}
+        >
           <div className="max-w-xl">
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-rms-muted">
               RMS Jewelries

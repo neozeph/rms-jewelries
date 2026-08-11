@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 export default function FinalCtaSection() {
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       aria-labelledby="final-cta-heading"
       className="border-t border-rms-charcoal/10 py-20 lg:py-28"
     >
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
+        <div
+          ref={ref}
+          className={`reveal mx-auto max-w-2xl text-center ${isVisible ? "is-visible" : ""}`}
+        >
           <SectionHeading
             id="final-cta-heading"
             eyebrow="Get in Touch"

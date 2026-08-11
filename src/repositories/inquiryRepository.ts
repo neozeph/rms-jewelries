@@ -16,37 +16,18 @@ export interface CreatedInquiry {
 export async function createInquiry(
   input: CreateInquiryInput,
 ): Promise<CreatedInquiry> {
-  const customerId = crypto.randomUUID();
-
-  const { error: customerError } = await supabase.from("customers").insert({
-    id: customerId,
-    full_name: input.fullName,
-    email: input.email,
-    phone: input.phone || null,
+  const { data, error } = await supabase.rpc("create_inquiry", {
+    p_full_name: input.fullName,
+    p_email: input.email,
+    p_phone: input.phone || null,
+    p_preferred_contact_method: input.preferredContactMethod || null,
+    p_message: input.message,
+    p_jewelry_id: input.jewelryId || null,
   });
 
-  if (customerError) {
-    throw customerError;
+  if (error) {
+    throw error;
   }
 
-  const message = input.preferredContactMethod
-    ? `Preferred contact method: ${input.preferredContactMethod}\n\n${input.message}`
-    : input.message;
-
-  const inquiryId = crypto.randomUUID();
-
-  const { error: inquiryError } = await supabase.from("inquiries").insert({
-    id: inquiryId,
-    customer_id: customerId,
-    jewelry_id: input.jewelryId || null,
-    inquiry_type: input.jewelryId ? "jewelry_piece" : "general",
-    message,
-    source: "website",
-  });
-
-  if (inquiryError) {
-    throw inquiryError;
-  }
-
-  return { id: inquiryId };
+  return { id: data };
 }

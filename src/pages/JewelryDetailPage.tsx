@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import { formatPrice } from "../features/jewelry/utils/formatPrice";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import {
   getPublishedJewelryBySlug,
   type Jewelry,
@@ -20,6 +21,10 @@ export default function JewelryDetailPage() {
   const [jewelry, setJewelry] = useState<Jewelry | null>(null);
   const [collection, setCollection] = useState<Collection | null>(null);
   const [retryToken, setRetryToken] = useState(0);
+
+  useDocumentTitle(
+    jewelry ? `${jewelry.name} — RMS Jewelries` : "Jewelry — RMS Jewelries",
+  );
 
   useEffect(() => {
     let isActive = true;
@@ -66,7 +71,9 @@ export default function JewelryDetailPage() {
         <Container>
           {status === "loading" && (
             <div role="status" aria-live="polite">
-              <span className="sr-only">Loading jewelry piece…</span>
+              <span id="jewelry-heading" className="sr-only">
+                Loading jewelry piece…
+              </span>
 
               <div
                 aria-hidden="true"
@@ -90,7 +97,10 @@ export default function JewelryDetailPage() {
 
           {status === "not-found" && (
             <div className="border border-rms-charcoal/10 px-8 py-16 text-center">
-              <h1 className="font-display text-3xl font-medium text-rms-charcoal">
+              <h1
+                id="jewelry-heading"
+                className="font-display text-3xl font-medium text-rms-charcoal"
+              >
                 Jewelry piece not found
               </h1>
               <p className="mt-3 text-sm text-rms-muted">
@@ -110,6 +120,9 @@ export default function JewelryDetailPage() {
               role="alert"
               className="border border-rms-charcoal/10 px-8 py-16 text-center"
             >
+              <span id="jewelry-heading" className="sr-only">
+                Error loading jewelry piece
+              </span>
               <p className="text-sm text-rms-muted">
                 We couldn&apos;t load this piece right now. Please try again
                 in a moment.
