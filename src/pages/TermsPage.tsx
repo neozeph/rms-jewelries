@@ -15,13 +15,13 @@ export default function TermsPage() {
               Terms &amp; Conditions
             </h1>
             <p className="mt-4 text-sm text-rms-muted">
-              Effective date: [DATE TO BE CONFIRMED]
+              Effective date: August 11, 2026
             </p>
 
             <div className="mt-10 space-y-16">
               <LegalSection title="1. About the Website">
                 <p>
-                  This website is operated by [RMS LEGAL ENTITY NAME]
+                  This website is operated by RMS Jewelries
                   (&ldquo;RMS,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;) as
                   a portfolio of custom jewelry work and a way for visitors
                   to submit inquiries. By using this website, you agree to
@@ -80,8 +80,8 @@ export default function TermsPage() {
                 <p>
                   Unless otherwise stated, all designs, photography, text,
                   and other content on this website are owned by or licensed
-                  to [RMS LEGAL ENTITY NAME] and may not be copied,
-                  reproduced, or reused without our prior written permission.
+                  to RMS Jewelries and may not be copied, reproduced, or
+                  reused without our prior written permission.
                 </p>
               </LegalSection>
 
@@ -111,8 +111,8 @@ export default function TermsPage() {
                   for any indirect, incidental, or consequential damages
                   arising from your use of this website. Nothing in these
                   terms limits any liability that cannot be excluded under
-                  applicable law. [GOVERNING LAW / JURISDICTION TO BE
-                  CONFIRMED]
+                  applicable law. These terms are governed by the laws of
+                  the Philippines.
                 </p>
               </LegalSection>
 
@@ -127,8 +127,14 @@ export default function TermsPage() {
 
               <LegalSection title="11. Contact">
                 <p>
-                  Questions about these terms can be directed to [RMS
-                  BUSINESS EMAIL].
+                  Questions about these terms can be directed to{" "}
+                  <a
+                    href="mailto:rmsjewelries@gmail.com"
+                    className="text-rms-charcoal underline underline-offset-2 hover:text-rms-gold"
+                  >
+                    rmsjewelries@gmail.com
+                  </a>
+                  .
                 </p>
               </LegalSection>
             </div>

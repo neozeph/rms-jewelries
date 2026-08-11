@@ -15,7 +15,7 @@ export default function PrivacyPage() {
               Privacy Notice
             </h1>
             <p className="mt-4 text-sm text-rms-muted">
-              Effective date: [DATE TO BE CONFIRMED]
+              Effective date: August 11, 2026
             </p>
 
             <div className="mt-10 space-y-16">
@@ -25,13 +25,18 @@ export default function PrivacyPage() {
                   &ldquo;us&rdquo;) operates this website as a portfolio of
                   custom jewelry work and a way for visitors to reach us with
                   inquiries. This notice explains what information we
-                  collect through this website, how we use it, and the
-                  choices available to you.
+                  currently collect through this website, how we use it, and
+                  the choices available to you.
                 </p>
                 <p>
                   This website does not currently include a shopping cart,
                   online checkout, or payment processing. It is used for
                   browsing our jewelry portfolio and submitting inquiries.
+                </p>
+                <p>
+                  This notice is intended to describe RMS&rsquo;s current
+                  data practices as implemented on this website today, and
+                  will be updated if those practices change.
                 </p>
               </LegalSection>
 
@@ -104,27 +109,16 @@ export default function PrivacyPage() {
 
               <LegalSection title="6. Data Retention">
                 <p>
-                  We retain inquiry and contact information for as long as
-                  reasonably necessary to respond to your inquiry and for
-                  our legitimate business record-keeping purposes. [RETENTION
-                  PERIOD TO BE CONFIRMED]
+                  We retain inquiry and contact information only for as
+                  long as reasonably necessary for the purposes for which
+                  it was collected, including responding to your inquiry,
+                  maintaining appropriate business records, and fulfilling
+                  other legitimate business purposes, subject to applicable
+                  legal requirements.
                 </p>
               </LegalSection>
 
-              <LegalSection title="7. Data Subject Rights">
-                <p>
-                  Depending on your location, you may have rights to access,
-                  correct, or request deletion of the personal information
-                  we hold about you. [APPLICABLE PRIVACY LAW / JURISDICTION
-                  TO BE CONFIRMED]
-                </p>
-                <p>
-                  To exercise any of these rights, contact us at [RMS
-                  BUSINESS EMAIL].
-                </p>
-              </LegalSection>
-
-              <LegalSection title="8. Cookies / Analytics">
+              <LegalSection title="7. Cookies / Analytics">
                 <p>
                   This website does not currently use analytics or
                   advertising cookies, and we do not use tools such as
@@ -136,7 +130,7 @@ export default function PrivacyPage() {
                 </p>
               </LegalSection>
 
-              <LegalSection title="9. Third-Party Services">
+              <LegalSection title="8. Third-Party Services">
                 <p>
                   We currently rely on Supabase for website data storage.
                   This website does not integrate third-party analytics,
@@ -144,7 +138,7 @@ export default function PrivacyPage() {
                 </p>
               </LegalSection>
 
-              <LegalSection title="10. Changes to This Privacy Notice">
+              <LegalSection title="9. Changes to This Privacy Notice">
                 <p>
                   We may update this notice from time to time. Any changes
                   will be posted on this page with an updated effective
@@ -152,17 +146,20 @@ export default function PrivacyPage() {
                 </p>
               </LegalSection>
 
-              <LegalSection title="11. Contact / Privacy Inquiries">
+              <LegalSection title="10. Contact / Privacy Inquiries">
                 <p>
                   If you have questions about this notice or wish to
                   exercise your rights, please contact us at:
                 </p>
                 <p>
-                  [RMS BUSINESS EMAIL]
+                  <a
+                    href="mailto:rmsjewelries@gmail.com"
+                    className="text-rms-charcoal underline underline-offset-2 hover:text-rms-gold"
+                  >
+                    rmsjewelries@gmail.com
+                  </a>
                   <br />
-                  [RMS BUSINESS ADDRESS]
-                  <br />
-                  [RMS BUSINESS PHONE NUMBER]
+                  Pandi, Bulacan, Philippines
                 </p>
               </LegalSection>
             </div>

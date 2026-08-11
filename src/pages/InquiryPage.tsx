@@ -76,6 +76,7 @@ export default function InquiryPage() {
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [honeypot, setHoneypot] = useState("");
   const isSubmittingRef = useRef(false);
 
   useEffect(() => {
@@ -115,6 +116,11 @@ export default function InquiryPage() {
     event.preventDefault();
 
     if (isSubmittingRef.current) return;
+
+    if (honeypot.trim() !== "") {
+      setSubmitStatus("success");
+      return;
+    }
 
     const validationErrors = validate(values);
     setErrors(validationErrors);
@@ -256,6 +262,22 @@ export default function InquiryPage() {
                   onSubmit={handleSubmit}
                   className="mt-10 space-y-7"
                 >
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden"
+                  >
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(event) => setHoneypot(event.target.value)}
+                    />
+                  </div>
+
                   <div>
                     <label htmlFor="fullName" className={labelClassName}>
                       Full name
