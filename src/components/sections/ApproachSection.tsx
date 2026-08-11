@@ -1,5 +1,6 @@
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 const APPROACH_ITEMS = [
   {
@@ -19,26 +20,34 @@ const APPROACH_ITEMS = [
 ];
 
 export default function ApproachSection() {
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>();
+
   return (
     <section aria-labelledby="approach-heading" className="py-20 lg:py-28">
       <Container>
-        <SectionHeading
-          id="approach-heading"
-          eyebrow="The RMS Approach"
-          title="How each piece comes together"
-        />
+        <div ref={ref}>
+          <div className={`reveal ${isVisible ? "is-visible" : ""}`}>
+            <SectionHeading
+              id="approach-heading"
+              eyebrow="The RMS Approach"
+              title="How each piece comes together"
+            />
+          </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-12 border-t border-rms-charcoal/10 pt-14 sm:grid-cols-3 sm:gap-8 sm:divide-x sm:divide-rms-charcoal/10">
-          {APPROACH_ITEMS.map((item) => (
-            <div key={item.title}>
-              <h3 className="font-display text-2xl font-medium text-rms-charcoal">
-                {item.title}
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-rms-muted">
-                {item.description}
-              </p>
-            </div>
-          ))}
+          <div
+            className={`reveal-stagger mt-14 grid grid-cols-1 gap-12 border-t border-rms-charcoal/10 pt-14 sm:grid-cols-3 sm:gap-8 sm:divide-x sm:divide-rms-charcoal/10 ${isVisible ? "is-visible" : ""}`}
+          >
+            {APPROACH_ITEMS.map((item) => (
+              <div key={item.title}>
+                <h3 className="font-display text-2xl font-medium text-rms-charcoal">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-rms-muted">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
     </section>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import JewelryCard from "../../features/jewelry/components/JewelryCard";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 import {
   getFeaturedPublishedJewelry,
   type Jewelry,
@@ -16,6 +17,10 @@ export default function FeaturedJewelrySection() {
   const [jewelry, setJewelry] = useState<Jewelry[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [retryToken, setRetryToken] = useState(0);
+  const { ref: headingRef, isVisible: isHeadingVisible } =
+    useScrollReveal<HTMLDivElement>();
+  const { ref: gridRef, isVisible: isGridVisible } =
+    useScrollReveal<HTMLUListElement>();
 
   useEffect(() => {
     let isActive = true;
@@ -46,7 +51,10 @@ export default function FeaturedJewelrySection() {
       className="py-20 lg:py-28"
     >
       <Container>
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div
+          ref={headingRef}
+          className={`reveal flex flex-wrap items-end justify-between gap-6 ${isHeadingVisible ? "is-visible" : ""}`}
+        >
           <SectionHeading
             id="featured-jewelry-heading"
             eyebrow="Selected Pieces"
@@ -101,7 +109,10 @@ export default function FeaturedJewelrySection() {
           )}
 
           {status === "success" && jewelry.length > 0 && (
-            <ul className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+            <ul
+              ref={gridRef}
+              className={`reveal-stagger grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4 ${isGridVisible ? "is-visible" : ""}`}
+            >
               {jewelry.map((item) => (
                 <li key={item.id}>
                   <JewelryCard jewelry={item} />

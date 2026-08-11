@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import CollectionCard from "../../features/collections/components/CollectionCard";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 import {
   getPublishedCollections,
   type Collection,
@@ -15,6 +16,10 @@ export default function FeaturedCollectionsSection() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [retryToken, setRetryToken] = useState(0);
+  const { ref: headingRef, isVisible: isHeadingVisible } =
+    useScrollReveal<HTMLDivElement>();
+  const { ref: gridRef, isVisible: isGridVisible } =
+    useScrollReveal<HTMLUListElement>();
 
   useEffect(() => {
     let isActive = true;
@@ -47,11 +52,16 @@ export default function FeaturedCollectionsSection() {
       className="py-20 lg:py-28"
     >
       <Container>
-        <SectionHeading
-          eyebrow="Collections"
-          title="Featured collections"
-          description="A curated selection of RMS pieces, each designed around a story worth remembering."
-        />
+        <div
+          ref={headingRef}
+          className={`reveal ${isHeadingVisible ? "is-visible" : ""}`}
+        >
+          <SectionHeading
+            eyebrow="Collections"
+            title="Featured collections"
+            description="A curated selection of RMS pieces, each designed around a story worth remembering."
+          />
+        </div>
 
         <div className="mt-14">
           {status === "loading" && (
@@ -100,7 +110,10 @@ export default function FeaturedCollectionsSection() {
           )}
 
           {status === "success" && displayCollections.length > 0 && (
-            <ul className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+            <ul
+              ref={gridRef}
+              className={`reveal-stagger grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4 ${isGridVisible ? "is-visible" : ""}`}
+            >
               {displayCollections.map((collection) => (
                 <li key={collection.id}>
                   <CollectionCard collection={collection} />
