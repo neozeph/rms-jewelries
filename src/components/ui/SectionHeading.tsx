@@ -1,13 +1,17 @@
 interface SectionHeadingProps {
+  id?: string;
   eyebrow?: string;
   title: string;
   description?: string;
+  centered?: boolean;
 }
 
 export default function SectionHeading({
+  id,
   eyebrow,
   title,
   description,
+  centered = false,
 }: SectionHeadingProps) {
   return (
     <div className="max-w-2xl">
@@ -17,12 +21,21 @@ export default function SectionHeading({
         </p>
       )}
 
-      <h2 className="mt-3 font-display text-4xl font-medium tracking-tight text-rms-charcoal sm:text-5xl">
+      <h2
+        id={id}
+        className="mt-3 font-display text-4xl font-medium tracking-tight text-rms-charcoal sm:text-5xl"
+      >
         {title}
       </h2>
 
       {description && (
-        <p className="mt-5 text-base leading-7 text-rms-muted">{description}</p>
+        <p
+          className={`mt-5 max-w-xl text-base leading-7 text-rms-muted ${
+            centered ? "mx-auto" : ""
+          }`}
+        >
+          {description}
+        </p>
       )}
     </div>
   );

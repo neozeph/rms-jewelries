@@ -35,6 +35,21 @@ export async function getPublishedJewelryByCollection(
   return data ?? [];
 }
 
+export async function getFeaturedPublishedJewelry(): Promise<Jewelry[]> {
+  const { data, error } = await supabase
+    .from("jewelry")
+    .select(JEWELRY_COLUMNS)
+    .eq("is_published", true)
+    .eq("is_featured", true)
+    .order("name");
+
+  if (error) {
+    throw error;
+  }
+
+  return data ?? [];
+}
+
 export async function getPublishedJewelryBySlug(
   slug: string,
 ): Promise<Jewelry | null> {
