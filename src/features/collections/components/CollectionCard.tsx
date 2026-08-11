@@ -13,7 +13,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         aria-label={`View the ${collection.name} collection`}
         className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
       >
-        <div className="aspect-[4/5] w-full overflow-hidden bg-black/5">
+        <div className="aspect-[4/5] w-full overflow-hidden border border-rms-charcoal/10 bg-black/5">
           {collection.cover_image_url ? (
             <img
               src={collection.cover_image_url}
