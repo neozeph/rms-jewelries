@@ -156,10 +156,10 @@ export default function PrivacyPage() {
                 </p>
                 <p>
                   <a
-                    href="mailto:rmsjewelries@gmail.com"
+                    href="mailto:jewelriesrms@gmail.com"
                     className="text-rms-charcoal underline underline-offset-2 hover:text-rms-gold"
                   >
-                    rmsjewelries@gmail.com
+                    jewelriesrms@gmail.com
                   </a>
                   <br />
                   Pandi, Bulacan, Philippines
