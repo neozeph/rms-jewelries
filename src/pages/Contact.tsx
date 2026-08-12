@@ -17,9 +17,9 @@ export default function Contact() {
               Contact RMS Jewelries
             </h1>
             <p className="mt-5 text-base leading-7 text-rms-muted">
-              The quickest way to reach us is to start an inquiry &mdash;
-              tell us a little about what you have in mind, and a member of
-              RMS will personally follow up.
+              The quickest way to reach us is to start an inquiry &mdash; tell
+              us a little about what you have in mind, and a member of RMS will
+              personally follow up.
             </p>
 
             <div className="mt-9">
@@ -40,10 +40,10 @@ export default function Contact() {
                   <dt className="font-medium text-rms-charcoal">Email</dt>
                   <dd className="mt-1">
                     <a
-                      href="mailto:rmsjewelries@gmail.com"
+                      href="mailto:jewelriesrms@gmail.com"
                       className="text-rms-charcoal underline underline-offset-2 hover:text-rms-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-2 focus-visible:ring-offset-rms-ivory"
                     >
-                      rmsjewelries@gmail.com
+                      jewelriesrms@gmail.com
                     </a>
                   </dd>
                 </div>

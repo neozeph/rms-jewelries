@@ -50,6 +50,37 @@ export default function About() {
           </div>
         </Container>
       </section>
+
+      <section
+        aria-labelledby="about-story-heading"
+        className="bg-rms-charcoal py-20 lg:py-28"
+      >
+        <Container>
+          <div className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-rms-ivory/70">
+              About RMS
+            </p>
+            <h2
+              id="about-story-heading"
+              className="mt-3 font-display text-4xl font-medium tracking-tight text-rms-ivory sm:text-5xl"
+            >
+              Rooted in a place known for the craft.
+            </h2>
+            <p className="mt-6 text-base leading-7 text-rms-ivory/80">
+              RMS Jewelries begins with a personal connection to one of
+              Bulacan&apos;s most familiar jewelry-making communities. Owned
+              by Reynaldo Soriente, whose roots trace back to Meycauayan, the
+              brand carries forward a connection to a place long associated
+              with the craft of jewelry. Today, RMS focuses on creating and
+              customizing pieces meant to feel personal, considered, and
+              worth remembering.
+            </p>
+            <p className="mt-6 text-sm uppercase tracking-[0.15em] text-rms-ivory/60">
+              RMS Jewelries &middot; Pandi, Bulacan
+            </p>
+          </div>
+        </Container>
+      </section>
     </main>
   );
 }

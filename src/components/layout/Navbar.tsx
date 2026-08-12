@@ -4,6 +4,8 @@ import { Link, NavLink } from "react-router-dom";
 const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/collections", label: "Collections" },
+  { to: "/services", label: "Services" },
+  { to: "/about", label: "About" },
 ];
 
 const linkClassName = ({ isActive }: { isActive: boolean }) =>
@@ -127,7 +129,11 @@ export default function Navbar() {
                 </li>
               ))}
               <li className="pt-2">
-                <Link to="/inquire" onClick={closeMenu} className={ctaClassName}>
+                <Link
+                  to="/inquire"
+                  onClick={closeMenu}
+                  className={ctaClassName}
+                >
                   Inquire
                 </Link>
               </li>
