@@ -11,6 +11,7 @@ import {
   getPublishedCollections,
   type Collection,
 } from "../repositories/collectionRepository";
+import { getTemporaryJewelryImage } from "../lib/temporaryImageFallbacks";
 
 type PageStatus = "loading" | "not-found" | "error" | "success";
 
@@ -23,8 +24,13 @@ export default function JewelryDetailPage() {
   const [retryToken, setRetryToken] = useState(0);
 
   useDocumentTitle(
-    jewelry ? `${jewelry.name} — RMS Jewelries` : "Jewelry — RMS Jewelries",
+    jewelry ? `${jewelry.name} | RMS Jewelries` : "Jewelry | RMS Jewelries",
   );
+
+  const imageUrl = jewelry
+    ? jewelry.cover_image_url ?? getTemporaryJewelryImage(jewelry.slug)
+    : null;
+  const isTemporaryImage = Boolean(jewelry && !jewelry.cover_image_url);
 
   useEffect(() => {
     let isActive = true;
@@ -143,10 +149,15 @@ export default function JewelryDetailPage() {
           {status === "success" && jewelry && (
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 lg:items-center">
               <div className="aspect-[4/5] w-full overflow-hidden bg-black/5">
-                {jewelry.cover_image_url ? (
+                {imageUrl ? (
                   <img
-                    src={jewelry.cover_image_url}
-                    alt={`${jewelry.name}, ${jewelry.material}`}
+                    src={imageUrl}
+                    alt={
+                      isTemporaryImage
+                        ? ""
+                        : `${jewelry.name}, ${jewelry.material}`
+                    }
+                    aria-hidden={isTemporaryImage ? "true" : undefined}
                     width="1000"
                     height="1250"
                     className="h-full w-full object-cover"

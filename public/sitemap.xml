@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  REPLACE https://your-production-domain.example BELOW WITH THE REAL
-  PRODUCTION DOMAIN BEFORE USE. This placeholder is deliberately
-  invalid so it can't be mistaken for a real, submittable sitemap.
-
-  Only static routes are listed. Dynamic /collections/:slug and
-  /jewelry/:slug pages are data-driven and are not included here.
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://your-production-domain.example/</loc>
+    <loc>https://rmsjewelries.vercel.app/</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/collections</loc>
+    <loc>https://rmsjewelries.vercel.app/collections</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/inquire</loc>
+    <loc>https://rmsjewelries.vercel.app/services</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/about</loc>
+    <loc>https://rmsjewelries.vercel.app/about</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/contact</loc>
+    <loc>https://rmsjewelries.vercel.app/contact</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/privacy</loc>
+    <loc>https://rmsjewelries.vercel.app/inquire</loc>
   </url>
   <url>
-    <loc>https://your-production-domain.example/terms</loc>
+    <loc>https://rmsjewelries.vercel.app/privacy</loc>
+  </url>
+  <url>
+    <loc>https://rmsjewelries.vercel.app/terms</loc>
   </url>
 </urlset>

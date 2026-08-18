@@ -37,17 +37,25 @@ export default function Navbar() {
   }
 
   return (
-    <header className="border-b border-black/10 bg-rms-ivory">
+    <header className="sticky top-0 z-50 border-b border-rms-charcoal/10 bg-rms-ivory">
       <div className="mx-auto max-w-7xl px-6">
         <nav
-          className="flex items-center justify-between py-5"
+          className="flex items-center justify-between py-4"
           aria-label="Primary navigation"
         >
           <Link
             to="/"
-            className="font-display text-2xl font-medium text-rms-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
+            aria-label="RMS Jewelries home"
+            className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
           >
-            RMS
+            <img
+              src="/rms-logo.svg"
+              alt=""
+              aria-hidden="true"
+              width="48"
+              height="48"
+              className="h-12 w-12 object-contain"
+            />
           </Link>
 
           <div className="hidden items-center gap-8 text-sm md:flex">

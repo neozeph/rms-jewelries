@@ -7,7 +7,7 @@ import FinalCtaSection from "../components/sections/FinalCtaSection";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export default function HomePage() {
-  useDocumentTitle("RMS Jewelries — Custom Jewelry Portfolio");
+  useDocumentTitle("RMS Jewelries | Custom Jewelry & Jewelry Services");
 
   return (
     <main>
