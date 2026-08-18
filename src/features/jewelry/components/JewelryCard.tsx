@@ -1,12 +1,24 @@
 import { Link } from "react-router-dom";
 import type { Jewelry } from "../../../repositories/jewelryRepository";
+import { getTemporaryJewelryImage } from "../../../lib/temporaryImageFallbacks";
 import { formatPrice } from "../utils/formatPrice";
 
 interface JewelryCardProps {
   jewelry: Jewelry;
+  fallbackImageUrl?: string;
 }
 
-export default function JewelryCard({ jewelry }: JewelryCardProps) {
+export default function JewelryCard({
+  jewelry,
+  fallbackImageUrl,
+}: JewelryCardProps) {
+  const imageUrl =
+    jewelry.cover_image_url ??
+    fallbackImageUrl ??
+    getTemporaryJewelryImage(jewelry.slug);
+  const isTemporaryImage =
+    !jewelry.cover_image_url || jewelry.id.startsWith("temporary-");
+
   return (
     <article>
       <Link
@@ -15,10 +27,11 @@ export default function JewelryCard({ jewelry }: JewelryCardProps) {
         className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
       >
         <div className="aspect-[4/5] w-full overflow-hidden border border-rms-charcoal/10 bg-black/5">
-          {jewelry.cover_image_url ? (
+          {imageUrl ? (
             <img
-              src={jewelry.cover_image_url}
-              alt={jewelry.name}
+              src={imageUrl}
+              alt={isTemporaryImage ? "" : jewelry.name}
+              aria-hidden={isTemporaryImage ? "true" : undefined}
               loading="lazy"
               width="800"
               height="1000"

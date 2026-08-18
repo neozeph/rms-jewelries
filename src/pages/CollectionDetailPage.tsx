@@ -11,6 +11,7 @@ import {
   getPublishedJewelryByCollection,
   type Jewelry,
 } from "../repositories/jewelryRepository";
+import { getTemporaryJewelryImage } from "../lib/temporaryImageFallbacks";
 
 type PageStatus = "loading" | "not-found" | "error" | "success";
 
@@ -25,7 +26,7 @@ export default function CollectionDetailPage() {
   const [retryToken, setRetryToken] = useState(0);
 
   useDocumentTitle(
-    collection ? `${collection.name} — RMS Jewelries` : "Collections — RMS Jewelries",
+    collection ? `${collection.name} | RMS Jewelries` : "Collections | RMS Jewelries",
   );
 
   useEffect(() => {
@@ -179,9 +180,15 @@ export default function CollectionDetailPage() {
                     aria-labelledby="collection-jewelry-heading"
                     className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4"
                   >
-                    {jewelry.map((item) => (
+                    {jewelry.map((item, index) => (
                       <li key={item.id}>
-                        <JewelryCard jewelry={item} />
+                        <JewelryCard
+                          jewelry={item}
+                          fallbackImageUrl={getTemporaryJewelryImage(
+                            item.slug,
+                            index,
+                          )}
+                        />
                       </li>
                     ))}
                   </ul>

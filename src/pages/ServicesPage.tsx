@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { TEMPORARY_UNSPLASH_IMAGES } from "../lib/temporaryImageFallbacks";
 
 interface ServiceItem {
   number: string;
@@ -36,16 +37,18 @@ const SERVICES: ServiceItem[] = [
   },
 ];
 
-function ServiceImagePlaceholder() {
+function ServiceImagePlaceholder({ imageUrl }: { imageUrl: string }) {
   return (
     <div className="aspect-[4/5] w-full overflow-hidden border border-rms-charcoal/10 bg-black/5">
-      {/* Placeholder for RMS photography */}
-      <div
-        className="flex h-full items-center justify-center"
+      <img
+        src={imageUrl}
+        alt=""
         aria-hidden="true"
-      >
-        <span className="font-display text-2xl text-rms-muted/50">RMS</span>
-      </div>
+        loading="lazy"
+        width="1000"
+        height="1250"
+        className="h-full w-full object-cover"
+      />
     </div>
   );
 }
@@ -91,7 +94,12 @@ export default function ServicesPage() {
           />
         );
 
-        const imageBlock = <ServiceImagePlaceholder key="image" />;
+        const imageBlock = (
+          <ServiceImagePlaceholder
+            key="image"
+            imageUrl={TEMPORARY_UNSPLASH_IMAGES.services[index]}
+          />
+        );
 
         return (
           <section

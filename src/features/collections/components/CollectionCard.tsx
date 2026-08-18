@@ -3,9 +3,17 @@ import type { Collection } from "../../../repositories/collectionRepository";
 
 interface CollectionCardProps {
   collection: Collection;
+  fallbackImageUrl?: string;
 }
 
-export default function CollectionCard({ collection }: CollectionCardProps) {
+export default function CollectionCard({
+  collection,
+  fallbackImageUrl,
+}: CollectionCardProps) {
+  const imageUrl = collection.cover_image_url ?? fallbackImageUrl;
+  const isTemporaryImage =
+    !collection.cover_image_url || collection.id.startsWith("temporary-");
+
   return (
     <article>
       <Link
@@ -14,10 +22,11 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
       >
         <div className="aspect-[4/5] w-full overflow-hidden border border-rms-charcoal/10 bg-black/5">
-          {collection.cover_image_url ? (
+          {imageUrl ? (
             <img
-              src={collection.cover_image_url}
-              alt={`${collection.name} collection`}
+              src={imageUrl}
+              alt={isTemporaryImage ? "" : `${collection.name} collection`}
+              aria-hidden={isTemporaryImage ? "true" : undefined}
               loading="lazy"
               width="800"
               height="1000"

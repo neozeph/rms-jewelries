@@ -52,7 +52,7 @@ const INITIAL_VALUES: FormValues = {
 };
 
 export default function InquiryPage() {
-  useDocumentTitle("Start an Inquiry — RMS Jewelries");
+  useDocumentTitle("Inquire | RMS Jewelries");
 
   const [searchParams] = useSearchParams();
   const jewelrySlug = searchParams.get("jewelry");

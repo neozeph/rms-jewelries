@@ -6,6 +6,10 @@ import {
   getPublishedCollections,
   type Collection,
 } from "../repositories/collectionRepository";
+import {
+  TEMPORARY_FEATURED_COLLECTIONS,
+  TEMPORARY_UNSPLASH_IMAGES,
+} from "../lib/temporaryImageFallbacks";
 
 type LoadStatus = "loading" | "success" | "error";
 
@@ -16,7 +20,6 @@ export default function CollectionsPage() {
 
   const [collections, setCollections] = useState<Collection[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
-  const [retryToken, setRetryToken] = useState(0);
 
   useEffect(() => {
     let isActive = true;
@@ -35,7 +38,10 @@ export default function CollectionsPage() {
     return () => {
       isActive = false;
     };
-  }, [retryToken]);
+  }, []);
+
+  const presentationCollections =
+    collections.length > 0 ? collections : TEMPORARY_FEATURED_COLLECTIONS;
 
   return (
     <main>
@@ -79,42 +85,18 @@ export default function CollectionsPage() {
               </div>
             )}
 
-            {status === "error" && (
-              <div
-                role="alert"
-                className="border border-rms-charcoal/10 px-8 py-16 text-center"
-              >
-                <p className="text-sm text-rms-muted">
-                  We couldn&apos;t load our collections right now. Please try
-                  again in a moment.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setStatus("loading");
-                    setRetryToken((token) => token + 1);
-                  }}
-                  className="mt-5 border border-rms-charcoal/20 px-6 py-2.5 text-sm font-medium text-rms-charcoal transition-colors hover:border-rms-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
-                >
-                  Try again
-                </button>
-              </div>
-            )}
-
-            {status === "success" && collections.length === 0 && (
-              <div className="border border-rms-charcoal/10 px-8 py-16 text-center">
-                <p className="text-sm text-rms-muted">
-                  Our collection is currently being curated. Please check
-                  back soon.
-                </p>
-              </div>
-            )}
-
-            {status === "success" && collections.length > 0 && (
+            {(status === "success" || status === "error") && (
               <ul className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-                {collections.map((collection) => (
+                {presentationCollections.map((collection, index) => (
                   <li key={collection.id}>
-                    <CollectionCard collection={collection} />
+                    <CollectionCard
+                      collection={collection}
+                      fallbackImageUrl={
+                        TEMPORARY_UNSPLASH_IMAGES.collections[
+                          index % TEMPORARY_UNSPLASH_IMAGES.collections.length
+                        ]
+                      }
+                    />
                   </li>
                 ))}
               </ul>

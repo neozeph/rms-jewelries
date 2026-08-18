@@ -7,6 +7,10 @@ import {
   getPublishedCollections,
   type Collection,
 } from "../../repositories/collectionRepository";
+import {
+  TEMPORARY_FEATURED_COLLECTIONS,
+  TEMPORARY_UNSPLASH_IMAGES,
+} from "../../lib/temporaryImageFallbacks";
 
 type LoadStatus = "loading" | "success" | "error";
 
@@ -15,7 +19,6 @@ const SKELETON_COUNT = 4;
 export default function FeaturedCollectionsSection() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
-  const [retryToken, setRetryToken] = useState(0);
   const { ref: headingRef, isVisible: isHeadingVisible } =
     useScrollReveal<HTMLDivElement>();
   const { ref: gridRef, isVisible: isGridVisible } =
@@ -38,13 +41,17 @@ export default function FeaturedCollectionsSection() {
     return () => {
       isActive = false;
     };
-  }, [retryToken]);
+  }, []);
 
   const featuredCollections = collections.filter(
     (collection) => collection.is_featured,
   );
   const displayCollections =
     featuredCollections.length > 0 ? featuredCollections : collections;
+  const presentationCollections =
+    displayCollections.length > 0
+      ? displayCollections
+      : TEMPORARY_FEATURED_COLLECTIONS;
 
   return (
     <section
@@ -79,44 +86,21 @@ export default function FeaturedCollectionsSection() {
             </ul>
           )}
 
-          {status === "error" && (
-            <div
-              role="alert"
-              className="border border-rms-charcoal/10 px-8 py-16 text-center"
-            >
-              <p className="text-sm text-rms-muted">
-                We couldn&apos;t load our collections right now. Please try
-                again in a moment.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setStatus("loading");
-                  setRetryToken((token) => token + 1);
-                }}
-                className="mt-5 border border-rms-charcoal/20 px-6 py-2.5 text-sm font-medium text-rms-charcoal transition-colors hover:border-rms-charcoal"
-              >
-                Try again
-              </button>
-            </div>
-          )}
-
-          {status === "success" && displayCollections.length === 0 && (
-            <div className="border border-rms-charcoal/10 px-8 py-16 text-center">
-              <p className="text-sm text-rms-muted">
-                New collections are on their way. Check back soon.
-              </p>
-            </div>
-          )}
-
-          {status === "success" && displayCollections.length > 0 && (
+          {(status === "success" || status === "error") && (
             <ul
               ref={gridRef}
               className={`reveal-stagger grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4 ${isGridVisible ? "is-visible" : ""}`}
             >
-              {displayCollections.map((collection) => (
+              {presentationCollections.map((collection, index) => (
                 <li key={collection.id}>
-                  <CollectionCard collection={collection} />
+                  <CollectionCard
+                    collection={collection}
+                    fallbackImageUrl={
+                      TEMPORARY_UNSPLASH_IMAGES.collections[
+                        index % TEMPORARY_UNSPLASH_IMAGES.collections.length
+                      ]
+                    }
+                  />
                 </li>
               ))}
             </ul>

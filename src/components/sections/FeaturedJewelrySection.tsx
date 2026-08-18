@@ -8,6 +8,10 @@ import {
   getFeaturedPublishedJewelry,
   type Jewelry,
 } from "../../repositories/jewelryRepository";
+import {
+  TEMPORARY_FEATURED_JEWELRY,
+  getTemporaryJewelryImage,
+} from "../../lib/temporaryImageFallbacks";
 
 type LoadStatus = "loading" | "success" | "error";
 
@@ -16,7 +20,6 @@ const SKELETON_COUNT = 4;
 export default function FeaturedJewelrySection() {
   const [jewelry, setJewelry] = useState<Jewelry[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
-  const [retryToken, setRetryToken] = useState(0);
   const { ref: headingRef, isVisible: isHeadingVisible } =
     useScrollReveal<HTMLDivElement>();
   const { ref: gridRef, isVisible: isGridVisible } =
@@ -39,11 +42,10 @@ export default function FeaturedJewelrySection() {
     return () => {
       isActive = false;
     };
-  }, [retryToken]);
+  }, []);
 
-  if (status === "success" && jewelry.length === 0) {
-    return null;
-  }
+  const presentationJewelry =
+    jewelry.length > 0 ? jewelry : TEMPORARY_FEATURED_JEWELRY;
 
   return (
     <section
@@ -86,36 +88,20 @@ export default function FeaturedJewelrySection() {
             </ul>
           )}
 
-          {status === "error" && (
-            <div
-              role="alert"
-              className="border border-rms-charcoal/10 px-8 py-16 text-center"
-            >
-              <p className="text-sm text-rms-muted">
-                We couldn&apos;t load featured jewelry right now. Please try
-                again in a moment.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setStatus("loading");
-                  setRetryToken((token) => token + 1);
-                }}
-                className="mt-5 border border-rms-charcoal/20 px-6 py-2.5 text-sm font-medium text-rms-charcoal transition-colors hover:border-rms-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-rms-gold focus-visible:ring-offset-4 focus-visible:ring-offset-rms-ivory"
-              >
-                Try again
-              </button>
-            </div>
-          )}
-
-          {status === "success" && jewelry.length > 0 && (
+          {(status === "success" || status === "error") && (
             <ul
               ref={gridRef}
               className={`reveal-stagger grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4 ${isGridVisible ? "is-visible" : ""}`}
             >
-              {jewelry.map((item) => (
+              {presentationJewelry.map((item, index) => (
                 <li key={item.id}>
-                  <JewelryCard jewelry={item} />
+                  <JewelryCard
+                    jewelry={item}
+                    fallbackImageUrl={getTemporaryJewelryImage(
+                      item.slug,
+                      index,
+                    )}
+                  />
                 </li>
               ))}
             </ul>
